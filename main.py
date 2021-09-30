@@ -32,6 +32,12 @@ def vrg_report_reminder_schedule():
     j.run_daily(vrg_report_reminder_send, days=(0, 1, 2, 3, 4, 5, 6), time=t)
 
 
+# Test report Reminder
+def test_report_reminder(update, context):
+    vrg_report_reminder_send(context)
+
+
+# Send report reminder
 def vrg_report_reminder_send(context: CallbackContext):
 
     text = ''
@@ -41,13 +47,14 @@ def vrg_report_reminder_send(context: CallbackContext):
     context.bot.send_message(chat_id=group_chat_id, text=text)
 
 
+# Who works today
 def work_today(update, context):
     print(update.effective_chat.id)
     from_user = update.message.from_user
     text_confirm = '@' + from_user['username'] + ' Одну минуточку, произвожу сверку с расписанием.'
     context.bot.send_message(chat_id=update.effective_chat.id, text=text_confirm)
     text = '@' + from_user['username'] + ' '
-    text += 'Сегодня на смене, исходя из расписания: ' + ' и '.join(worker_parser.sheet_get_workers())
+    text += 'Сегодня на смене, исходя из расписания: ' + ' и '.join(worker_parser.sheet_get_workers(with_usernames=True))
     context.bot.send_message(chat_id=update.effective_chat.id, text=text)
 
 
@@ -63,6 +70,10 @@ def main():
     # Who works today
     work_today_handler = CommandHandler('workToday', work_today)
     dispatcher.add_handler(work_today_handler)
+
+    # Test report reminder
+    test_report_reminder_handler = CommandHandler('testReportReminder', test_report_reminder)
+    dispatcher.add_handler(test_report_reminder_handler)
 
     # Unknown Command
     unknown_handler = MessageHandler(Filters.command, unknown)

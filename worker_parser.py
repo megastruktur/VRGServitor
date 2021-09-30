@@ -42,21 +42,24 @@ def sheet_find_start_row(tab):
             return i
 
 
-def sheet_work_today_finder(tab, row_num):
+def sheet_work_today_finder(tab, row_num, with_usernames):
     work_today = []
     c = 1
     for i in workers:
         if tab.cell(days[str(dt.day)] + str(row_num + c)).value not in days_off:
-            work_today.append(tab.cell('A' + str(row_num + c)).value)
+            worker_name = tab.cell('A' + str(row_num + c)).value
+            if with_usernames == True:
+                worker_name += ' (' + workers[worker_name] + ')'
+            work_today.append(worker_name)
         c += 1
     return work_today
 
 
-def sheet_get_workers():
+def sheet_get_workers(with_usernames=False):
 
     tab = sheet_get_sheet()
     row_num = sheet_find_start_row(tab)
-    return sheet_work_today_finder(tab, row_num)
+    return sheet_work_today_finder(tab, row_num, with_usernames)
 
 
 def main():
