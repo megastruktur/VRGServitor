@@ -3,19 +3,14 @@ import datetime
 from dotenv import load_dotenv
 import os
 import pytz
+import locale
+import pymorphy2
 
 load_dotenv()
 
-days = {
- '1': 'C', '2': 'D', '3': 'E', '4': 'F', '5': 'G', '6': 'H', '7': 'I', '8': 'J', '9': 'K', '10': 'L', '11': 'M',
- '12': 'N', '13': 'O', '14': 'P', '15': 'Q', '16': 'R', '17': 'S', '18': 'T', '19': 'U', '20': 'V', '21': 'W',
- '22': 'X', '23': 'Y', '24': 'Z', '25': 'AA', '26': 'AB', '27': 'AC', '28': 'AD', '29': 'AE', '30': 'AF', '31': 'AG'
-}
+LOCALE = os.environ.get('LOCALE')
 
-months = {
-    '1': 'Январь', '2': 'Февраль', '3': 'Март', '4': 'Апрель', '5': 'Май', '6': 'Июнь', '7': 'Июль', '8': 'Август',
-    '9': 'Сентябрь', '10': 'Октябрь', '11': 'Ноябрь', '12': 'Декабрь'
-}
+locale.setlocale(locale.LC_TIME, LOCALE)
 
 workers = {
     'Артём': '@grizzlbear',
@@ -28,7 +23,6 @@ days_off = ['В', 'ОВ']
 
 SHEET_ID = os.environ.get('SHEET_ID')
 
-dt = datetime.datetime.now(pytz.timezone('Europe/Minsk'))
 
 def sheet_get_sheet():
     gc = pygsheets.authorize(service_file='service_account_secret.json')
@@ -36,31 +30,33 @@ def sheet_get_sheet():
     return sheet.worksheet('title', 'ГРАФИК')
 
 
-def sheet_find_start_row(tab):
-    search_str = months[str(dt.month)] + '\'' + str(dt.year)[-2:]
-    for i in range(12, 10000, 6):
-        if tab.cell('A' + str(i)).value == search_str:
-            return i
+def sheet_work_today_finder(dt, tab, with_usernames):
+    m = pymorphy2.MorphAnalyzer()
+    month = dt.strftime('%B')
+    month_name = m.parse(month)[0].inflect({'nomn'}).word.title()
+    search_str = month_name + '\'' + dt.strftime('%-y')
+    row_num = tab.find(search_str)[0].row
 
-
-def sheet_work_today_finder(tab, row_num, with_usernames):
     work_today = []
-    c = 1
-    for i in workers:
-        if tab.cell(days[str(dt.day)] + str(row_num + c)).value not in days_off:
-            worker_name = tab.cell('A' + str(row_num + c)).value
-            if with_usernames == True:
+
+    address1 = pygsheets.Address((row_num, 1))
+    address2 = pygsheets.Address((row_num + len(workers), 33))
+    shifts = tab.range(address1.label + ':' + address2.label, returnas='matrix')
+
+    for z in range(len(workers)):
+        if shifts[z + 1][dt.day + 1] not in days_off:
+            worker_name = shifts[z + 1][0]
+            if with_usernames:
                 worker_name += ' (' + workers[worker_name] + ')'
             work_today.append(worker_name)
-        c += 1
     return work_today
 
 
-def sheet_get_workers(with_usernames=False):
-
+def sheet_get_workers(with_usernames=False, dt=False):
+    if not dt:
+        dt = datetime.datetime.now(pytz.timezone('Europe/Minsk'))
     tab = sheet_get_sheet()
-    row_num = sheet_find_start_row(tab)
-    return sheet_work_today_finder(tab, row_num, with_usernames)
+    return sheet_work_today_finder(dt, tab, with_usernames)
 
 
 def main():
