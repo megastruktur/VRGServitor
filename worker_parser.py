@@ -2,6 +2,7 @@ import pygsheets
 import datetime
 from dotenv import load_dotenv
 import os
+import pytz
 
 load_dotenv()
 
@@ -27,7 +28,7 @@ days_off = ['В', 'ОВ']
 
 SHEET_ID = os.environ.get('SHEET_ID')
 
-dt = datetime.datetime.today()
+dt = datetime.datetime.now(pytz.timezone('Europe/Minsk'))
 
 def sheet_get_sheet():
     gc = pygsheets.authorize(service_file='service_account_secret.json')
