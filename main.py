@@ -46,7 +46,8 @@ def work_today(update, context):
     from_user = update.message.from_user
     text_confirm = '@' + from_user['username'] + ' Одну минуточку, произвожу сверку с расписанием.'
     context.bot.send_message(chat_id=update.effective_chat.id, text=text_confirm)
-    text = '@' + from_user['username'] + ' ' + ' и '.join(worker_parser.sheet_get_workers())
+    text = '@' + from_user['username'] + ' '
+    text += 'Сегодня на смене, исходя из расписания: ' + ' и '.join(worker_parser.sheet_get_workers())
     context.bot.send_message(chat_id=update.effective_chat.id, text=text)
 
 
@@ -66,6 +67,11 @@ def main():
     # Unknown Command
     unknown_handler = MessageHandler(Filters.command, unknown)
     dispatcher.add_handler(unknown_handler)
+
+    # commands = [
+    #     BotCommand('workToday', 'кто работает сегодня')
+    # ]
+    # updater.bot.set_my_commands(commands=commands)
 
     # Reminder
     vrg_report_reminder_schedule()
