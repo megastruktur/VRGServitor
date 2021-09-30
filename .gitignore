@@ -1,0 +1,7 @@
+.env
+service_account_secret.json
+venv
+.venv
+__pycache__
+.idea
+*.iml
