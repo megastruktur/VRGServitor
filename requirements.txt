@@ -1,4 +1,4 @@
 python-telegram-bot
-pygsheets
+git+git://github.com/nithinmurali/pygsheets@staging
 python-dotenv
 pymorphy2

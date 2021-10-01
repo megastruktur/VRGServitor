@@ -1,10 +1,11 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+import os
 import logging
-from datetime import datetime, time
 import pytz
 import worker_parser
+import schedule_parser
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from datetime import datetime, time
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
 
@@ -58,6 +59,25 @@ def work_today(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=text)
 
 
+# Get schedule command
+def get_schedule(update, context):
+
+    try:
+        search_date = datetime.strptime(context.args[0] + ' 00:00:00', '%d.%m.%Y %H:%M:%S').replace(tzinfo=pytz.timezone(
+        'Europe/Minsk'))
+
+        if search_date:
+            schedules = schedule_parser.get_schedule(search_date)
+            text = 'Расписание на ' + search_date.strftime('%d.%m.%Y') + '\n\n'
+            for s in schedules:
+                text += s['time_start'] + ' - ' + s['time_end'] + ' | ' + s['description'] \
+                        + ' ( #' + ' #'.join(s['devices']) + ')\n'
+    except:
+        text = 'Пожалуйста, укажите дату в формате дд.мм.гггг'
+
+    context.bot.send_message(chat_id=update.effective_chat.id, text=text)
+
+
 def main():
 
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -74,6 +94,10 @@ def main():
     # Test report reminder
     test_report_reminder_handler = CommandHandler('testReportReminder', test_report_reminder)
     dispatcher.add_handler(test_report_reminder_handler)
+
+    # Get Schedule
+    get_schedule_handler = CommandHandler('calendar', get_schedule)
+    dispatcher.add_handler(get_schedule_handler)
 
     # Unknown Command
     unknown_handler = MessageHandler(Filters.command, unknown)
