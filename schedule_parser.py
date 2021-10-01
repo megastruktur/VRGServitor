@@ -80,7 +80,7 @@ def get_schedule(dt: datetime):
         col_in_range_start = schedule.start[1] - schedule_datarange.start_addr[1]
         col_in_range_end = schedule.end[1] - schedule_datarange.start_addr[1]
         scheduled_devices = []
-        for di in range(col_in_range_start, col_in_range_end):
+        for di in range(col_in_range_start, col_in_range_end + 1):
             scheduled_devices.append(devices[di])
         # print(scheduled_devices)
 

@@ -71,7 +71,7 @@ def get_schedule(update, context):
             text = 'Расписание на ' + search_date.strftime('%d.%m.%Y') + '\n\n'
             for s in schedules:
                 text += s['time_start'] + ' - ' + s['time_end'] + ' | ' + s['description'] \
-                        + ' ( #' + ' #'.join(s['devices']) + ')\n'
+                        + ' ( #' + ' #'.join(s['devices']) + ' )\n'
     except:
         text = 'Пожалуйста, укажите дату в формате дд.мм.гггг'
 
