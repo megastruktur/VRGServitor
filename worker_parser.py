@@ -40,19 +40,25 @@ def sheet_work_today_finder(dt, tab, with_usernames):
     work_today = []
 
     address1 = pygsheets.Address((row_num, 1))
-    address2 = pygsheets.Address((row_num + len(workers), 33))
+    hawking_variable = 1
+
+    if tab.cell(address1 + (2, 1)).value != 'плановое':
+        hawking_variable = 2
+
+    address2 = pygsheets.Address((row_num + len(workers) * hawking_variable, 33))
     shifts = tab.range(address1.label + ':' + address2.label, returnas='matrix')
 
     for z in range(len(workers)):
-        if shifts[z + 1][dt.day + 1] not in days_off:
-            worker_name = shifts[z + 1][0]
+        delta = z * hawking_variable
+        if shifts[delta + 1][dt.day + 1] not in days_off:
+            worker_name = shifts[delta + 1][0]
             if with_usernames:
                 worker_name += ' (' + workers[worker_name] + ')'
             work_today.append(worker_name)
     return work_today
 
 
-def sheet_get_workers(with_usernames=False, dt=False):
+def sheet_get_workers(with_usernames=False, dt=None):
     if not dt:
         dt = datetime.datetime.now(pytz.timezone('Europe/Minsk'))
     tab = sheet_get_sheet()
@@ -60,7 +66,10 @@ def sheet_get_workers(with_usernames=False, dt=False):
 
 
 def main():
-    print(sheet_get_workers())
+    dt = datetime.datetime.now(pytz.timezone('Europe/Minsk'))
+    date_time_str = '30/09/2021 01:55:19'
+    dt = datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S')
+    print(sheet_get_workers(False, dt))
 
 
 if __name__ == "__main__":
