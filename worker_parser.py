@@ -9,7 +9,7 @@ import pymorphy2
 load_dotenv()
 
 LOCALE = os.environ.get('LOCALE')
-
+DEFAULT_TIMEZONE = 'Europe/Minsk'
 locale.setlocale(locale.LC_TIME, LOCALE)
 
 workers_tg = {
@@ -73,21 +73,21 @@ def sheet_work_today_finder(dt, tab, with_usernames, lines_per_worker):
 
 def sheet_get_workers(with_usernames=False, dt=None):
     if not dt:
-        dt = datetime.datetime.now(pytz.timezone('Europe/Minsk'))
+        dt = datetime.datetime.now(pytz.timezone(DEFAULT_TIMEZONE))
 
     # Previously we had 2 rows per worker, now we have 1 row per worker
     lines_per_worker = 1
-    if dt < datetime.datetime(2022, 2, 1):
+    if dt < datetime.datetime(2022, 2, 1, 0, 0, 0, 0, pytz.timezone(DEFAULT_TIMEZONE)):
         lines_per_worker = 2
     tab = sheet_get_sheet()
     return sheet_work_today_finder(dt, tab, with_usernames, lines_per_worker)
 
 
 def main():
-    dt = datetime.datetime.now(pytz.timezone('Europe/Minsk'))
-    date_time_str = '04/02/2022 01:55:19'
-    dt = datetime.datetime.strptime(date_time_str, '%d/%m/%Y %H:%M:%S')
+    # dt = datetime.datetime.now(pytz.timezone('Europe/Minsk'))
+    dt = datetime.datetime(2022, 2, 4, 0, 0, 0, 0, pytz.timezone(DEFAULT_TIMEZONE))
     print(sheet_get_workers(True, dt))
+    print(sheet_get_workers(True))
 
 
 if __name__ == "__main__":
