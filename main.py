@@ -43,7 +43,7 @@ def vrg_report_reminder_send(context: CallbackContext):
 
     text = ''
     for worker in worker_parser.sheet_get_workers():
-        if worker in worker_parser.workers_tg[worker]:
+        if worker in worker_parser.workers_tg:
             text += worker_parser.workers_tg[worker] + ' '
     text += 'Прошу прощения за беспокойство, напоминаю про необходимость написания отчёта.'
     context.bot.send_message(chat_id=group_chat_id, text=text)
