@@ -25,20 +25,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       -
-        name: Test Env Secrets
-        env:
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          GROUP_CHAT_ID: ${{ secrets.GROUP_CHAT_ID }}
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          SHEET_ID: ${{ secrets.SHEET_ID }}
-          LOCALE: ${{ secrets.LOCALE }}
-        run: |
-          echo $GOOGLE_API_KEY | base64
-          echo $GROUP_CHAT_ID | base64
-          echo $BOT_TOKEN | base64
-          echo $SHEET_ID | base64
-          echo $LOCALE | base64
-      -
         name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -51,3 +37,4 @@ jobs:
             BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
             SHEET_ID=${{ secrets.SHEET_ID }}
             LOCALE=${{ secrets.LOCALE }}
+            SERVICE_ACCOUNT_SECRET_JSON_B64=${{ secrets.SERVICE_ACCOUNT_SECRET_JSON_B64 }}

@@ -16,6 +16,7 @@ RUN --mount=type=secret,id=GOOGLE_API_KEY \
       export GROUP_CHAT_ID=$(cat /run/secrets/GROUP_CHAT_ID) && \
       export BOT_TOKEN=$(cat /run/secrets/BOT_TOKEN) && \
       export LOCALE=$(cat /run/secrets/LOCALE) && \
+      cat /run/secrets/SERVICE_ACCOUNT_SECRET_JSON_B64 | base64 -d > /app/service_account_secret.json && \
       echo "GOOGLE_API_KEY=$GOOGLE_API_KEY" >> /app/.env && \
       echo "SHEET_ID=$SHEET_ID" >> /app/.env && \
       echo "GROUP_CHAT_ID=$GROUP_CHAT_ID" >> /app/.env && \
