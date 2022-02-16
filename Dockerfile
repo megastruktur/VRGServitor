@@ -1,10 +1,6 @@
 FROM python:latest
 LABEL Maintainer="megastruktur"
 
-WORKDIR /app
-
-COPY . /app
-
 # Set env variables from Github Secrets
 RUN --mount=type=secret,id=GOOGLE_API_KEY \
     --mount=type=secret,id=SHEET_ID \
@@ -21,6 +17,10 @@ RUN --mount=type=secret,id=GOOGLE_API_KEY \
       echo "GROUP_CHAT_ID=$GROUP_CHAT_ID" >> /app/.env \
       echo "BOT_TOKEN=$BOT_TOKEN" >> /app/.env \
       echo "LOCALE=$LOCALE" >> /app/.env
+
+WORKDIR /app
+
+COPY . /app
 
 RUN apt-get update && \
     apt-get install -y locales && \
