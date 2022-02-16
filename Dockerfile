@@ -11,18 +11,18 @@ RUN --mount=type=secret,id=GOOGLE_API_KEY \
     --mount=type=secret,id=GROUP_CHAT_ID \
     --mount=type=secret,id=BOT_TOKEN \
     --mount=type=secret,id=LOCALE \
+    --mount=type=secret,id=SERVICE_ACCOUNT_SECRET_JSON_B64 \
       export GOOGLE_API_KEY=$(cat /run/secrets/GOOGLE_API_KEY) && \
-      export SHEET_ID=$(cat /run/secrets/SHEET_ID) && \
-      export GROUP_CHAT_ID=$(cat /run/secrets/GROUP_CHAT_ID) && \
-      export BOT_TOKEN=$(cat /run/secrets/BOT_TOKEN) && \
-      export LOCALE=$(cat /run/secrets/LOCALE) && \
-      export SERVICE_ACCOUNT_SECRET_JSON_B64=$(cat /run/secrets/SERVICE_ACCOUNT_SECRET_JSON_B64) && \
-      echo $SERVICE_ACCOUNT_SECRET_JSON_B64 | base64 -d > /app/service_account_secret.json && \
       echo "GOOGLE_API_KEY=$GOOGLE_API_KEY" >> /app/.env && \
+      export SHEET_ID=$(cat /run/secrets/SHEET_ID) && \
       echo "SHEET_ID=$SHEET_ID" >> /app/.env && \
+      export GROUP_CHAT_ID=$(cat /run/secrets/GROUP_CHAT_ID) && \
       echo "GROUP_CHAT_ID=$GROUP_CHAT_ID" >> /app/.env && \
+      export BOT_TOKEN=$(cat /run/secrets/BOT_TOKEN) && \
       echo "BOT_TOKEN=$BOT_TOKEN" >> /app/.env && \
-      echo "LOCALE=$LOCALE" >> /app/.env
+      export LOCALE=$(cat /run/secrets/LOCALE) && \
+      echo "LOCALE=$LOCALE" >> /app/.env && \
+      cat /run/secrets/SERVICE_ACCOUNT_SECRET_JSON_B64 | base64 -d > /app/service_account_secret.json
 
 RUN apt-get update && \
     apt-get install -y locales && \
