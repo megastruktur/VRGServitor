@@ -48,6 +48,6 @@ jobs:
           secrets: |
             GOOGLE_API_KEY="${{ secrets.GOOGLE_API_KEY }}"
             GROUP_CHAT_ID=${{ secrets.GROUP_CHAT_ID }}
-            BOT_TOKEN=sometoken
+            BOT_TOKEN="${{ secrets.BOT_TOKEN }}"
             SHEET_ID=${{ secrets.SHEET_ID }}
             LOCALE=${{ secrets.LOCALE }}
