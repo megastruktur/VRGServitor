@@ -11,11 +11,16 @@ RUN --mount=type=secret,id=GOOGLE_API_KEY \
     --mount=type=secret,id=GROUP_CHAT_ID \
     --mount=type=secret,id=BOT_TOKEN \
     --mount=type=secret,id=LOCALE \
-  export GOOGLE_API_KEY=$(cat /run/secrets/GOOGLE_API_KEY) \
-  export SHEET_ID=$(cat /run/secrets/SHEET_ID) \
-  export GROUP_CHAT_ID=$(cat /run/secrets/GROUP_CHAT_ID) \
-  export BOT_TOKEN=$(cat /run/secrets/BOT_TOKEN) \
-  export LOCALE=$(cat /run/secrets/LOCALE)
+      echo $GOOGLE_API_KEY \
+      echo $SHEET_ID \
+      echo $GROUP_CHAT_ID \
+      echo $BOT_TOKEN \
+      echo $LOCALE \
+      echo $GOOGLE_API_KEY >> /app/.env \
+      echo $SHEET_ID >> /app/.env \
+      echo $GROUP_CHAT_ID >> /app/.env \
+      echo $BOT_TOKEN >> /app/.env \
+      echo $LOCALE >> /app/.env
 
 RUN apt-get update && \
     apt-get install -y locales && \
@@ -26,4 +31,4 @@ ENV LANG ru_RU.UTF-8
 ENV LC_ALL ru_RU.UTF-8
 
 RUN pip install -r /app/requirements.txt
-CMD ["python", "main.py"]
+#CMD ["python", "main.py"]
