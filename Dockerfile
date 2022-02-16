@@ -11,11 +11,6 @@ RUN --mount=type=secret,id=GOOGLE_API_KEY \
     --mount=type=secret,id=GROUP_CHAT_ID \
     --mount=type=secret,id=BOT_TOKEN \
     --mount=type=secret,id=LOCALE \
-      echo $GOOGLE_API_KEY \
-      echo $SHEET_ID \
-      echo $GROUP_CHAT_ID \
-      echo $BOT_TOKEN \
-      echo $LOCALE \
       echo $GOOGLE_API_KEY >> /app/.env \
       echo $SHEET_ID >> /app/.env \
       echo $GROUP_CHAT_ID >> /app/.env \
@@ -31,4 +26,4 @@ ENV LANG ru_RU.UTF-8
 ENV LC_ALL ru_RU.UTF-8
 
 RUN pip install -r /app/requirements.txt
-#CMD ["python", "main.py"]
+CMD ["python", "main.py"]
