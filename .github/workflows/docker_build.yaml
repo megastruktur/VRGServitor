@@ -33,8 +33,8 @@ jobs:
           SHEET_ID: ${{ secrets.SHEET_ID }}
           LOCALE: ${{ secrets.LOCALE }}
         run: |
-          echo "$GOOGLE_API_KEY" | base64
           echo $GROUP_CHAT_ID | base64
+          echo "$GOOGLE_API_KEY" | base64
           echo $BOT_TOKEN | base64
           echo $SHEET_ID | base64
           echo $LOCALE | base64
