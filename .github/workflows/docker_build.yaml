@@ -30,6 +30,7 @@ jobs:
         with:
           context: .
           tags: megastruktur/python-vrg-servitor:latest
+          push: true
           secrets: |
             "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}"
             "GROUP_CHAT_ID=${{ secrets.GROUP_CHAT_ID }}"
