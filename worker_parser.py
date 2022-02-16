@@ -19,6 +19,7 @@ workers_tg = {
     'Иван': '@MrKio',
     'Даниил': '@dutyala',
     'Даник': '@dutyala',
+    'Костя': '@Arkatick',
 }
 
 days_off = ['В', 'ОВ']
