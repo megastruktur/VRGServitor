@@ -11,11 +11,11 @@ RUN --mount=type=secret,id=GOOGLE_API_KEY \
     --mount=type=secret,id=GROUP_CHAT_ID \
     --mount=type=secret,id=BOT_TOKEN \
     --mount=type=secret,id=LOCALE \
-      echo $GOOGLE_API_KEY >> /app/.env \
-      echo $SHEET_ID >> /app/.env \
-      echo $GROUP_CHAT_ID >> /app/.env \
-      echo $BOT_TOKEN >> /app/.env \
-      echo $LOCALE >> /app/.env
+      echo "GOOGLE_API_KEY=$GOOGLE_API_KEY" >> /app/.env \
+      echo "SHEET_ID=$SHEET_ID" >> /app/.env \
+      echo "GROUP_CHAT_ID=$GROUP_CHAT_ID" >> /app/.env \
+      echo "BOT_TOKEN=$BOT_TOKEN" >> /app/.env \
+      echo "LOCALE=$LOCALE" >> /app/.env
 
 RUN apt-get update && \
     apt-get install -y locales && \
