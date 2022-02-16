@@ -40,7 +40,7 @@ jobs:
           echo $LOCALE >> secrets.txt
       -
         name: Run tmate
-        uses: mxschmitt/action-tmate@v2
+        uses: mxschmitt/action-tmate@v3
 #      -
 #        name: Build and push
 #        uses: docker/build-push-action@v2
