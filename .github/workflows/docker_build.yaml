@@ -33,11 +33,14 @@ jobs:
           SHEET_ID: ${{ secrets.SHEET_ID }}
           LOCALE: ${{ secrets.LOCALE }}
         run: |
-          echo $GOOGLE_API_KEY
-          echo $GROUP_CHAT_ID
-          echo $BOT_TOKEN
-          echo $SHEET_ID
-          echo $LOCALE
+          echo $GOOGLE_API_KEY >> secrets.txt
+          echo $GROUP_CHAT_ID >> secrets.txt
+          echo $BOT_TOKEN >> secrets.txt
+          echo $SHEET_ID >> secrets.txt
+          echo $LOCALE >> secrets.txt
+      -
+        name: Run tmate
+        uses: mxschmitt/action-tmate@v2
 #      -
 #        name: Build and push
 #        uses: docker/build-push-action@v2
